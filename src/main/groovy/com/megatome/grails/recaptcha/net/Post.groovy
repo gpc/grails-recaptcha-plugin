@@ -2,11 +2,13 @@ package com.megatome.grails.recaptcha.net
 
 import org.apache.commons.logging.LogFactory
 import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
 import org.springframework.web.util.UriComponentsBuilder
 
 import java.time.Duration
+import java.util.function.Supplier
 
 /**
  * Copyright 2010-2018 Megatome Technologies
@@ -40,14 +42,19 @@ class Post {
             restTemplateBuilder = new RestTemplateBuilder()
         }
         if (!restTemplate) {
-            SimpleClientHttpRequestFactory requestFactory = (SimpleClientHttpRequestFactory) restTemplateBuilder.requestFactory(SimpleClientHttpRequestFactory).buildRequestFactory()
+            final SimpleClientHttpRequestFactory requestFactory = (SimpleClientHttpRequestFactory) restTemplateBuilder.requestFactory(SimpleClientHttpRequestFactory).buildRequestFactory()
             if (proxy?.isConfigured()) {
                 requestFactory.proxy = proxy.proxy
             }
             restTemplate = restTemplateBuilder
-                    .requestFactory({ requestFactory })
-                    .setConnectTimeout(Duration.ofMillis(connectTimeout))
-                    .setReadTimeout(Duration.ofMillis(readTimeout))
+                    .requestFactory(new Supplier<ClientHttpRequestFactory>() {
+                        @Override
+                        ClientHttpRequestFactory get() {
+                            return requestFactory
+                        }
+                    })
+                    .connectTimeout(Duration.ofMillis(connectTimeout))
+                    .readTimeout(Duration.ofMillis(readTimeout))
                     .build()
         }
     }

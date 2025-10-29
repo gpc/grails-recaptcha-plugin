@@ -4,6 +4,7 @@ import com.megatome.grails.recaptcha.ReCaptcha
 import com.megatome.grails.recaptcha.net.AuthenticatorProxy
 import com.megatome.grails.util.ConfigHelper
 import grails.util.Environment
+import org.apache.commons.logging.LogFactory
 import org.grails.config.NavigableMap
 
 /**
@@ -23,6 +24,7 @@ import org.grails.config.NavigableMap
  */
 
 class RecaptchaService {
+    private static final log = LogFactory.getLog(this)
     boolean transactional = false
     def grailsApplication
     private NavigableMap recaptchaConfig = null

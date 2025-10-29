@@ -1,112 +1,66 @@
 buildscript {
     repositories {
-        mavenLocal()
-        maven { url "https://repo.grails.org/grails/core" }
+        mavenCentral()
+        maven { url "https://repo.grails.org/grails/restricted" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
-        classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.3.4"
+        classpath platform("org.apache.grails:grails-bom:$grailsVersion")
+        classpath "org.apache.grails:grails-gradle-plugins"
     }
 }
 
-plugins {
-    id 'net.saliman.cobertura' version '4.0.0'
-    id 'com.github.kt3k.coveralls' version '2.12.0'
-}
-
-version "5.0.0-SNAPSHOT"
+version "7.0.0-SNAPSHOT"
 group "org.grails.plugins"
 
-apply plugin: 'eclipse'
-apply plugin: 'idea'
-apply plugin: "org.grails.grails-plugin"
+apply plugin: "eclipse"
+apply plugin: "idea"
+apply plugin: "org.apache.grails.gradle.grails-plugin"
 apply plugin: "maven-publish"
-apply plugin: "org.grails.grails-gsp"
-apply plugin: "asset-pipeline"
-
-cobertura.coverageFormats = ['html', 'xml']
+apply plugin: "org.apache.grails.gradle.grails-gsp"
 
 repositories {
-    mavenLocal()
     mavenCentral()
-    maven { url "https://repo.grails.org/grails/core" }
-}
-
-dependencyManagement {
-    imports {
-        mavenBom "org.grails:grails-bom:$grailsVersion"
-    }
-    applyMavenExclusions false
-}
-
-configurations {
-    developmentOnly
-    runtimeClasspath {
-        extendsFrom developmentOnly
-    }
+    maven { url "https://repo.grails.org/grails/restricted" }
 }
 
 dependencies {
-    developmentOnly("org.springframework.boot:spring-boot-devtools")
-    compileOnly "io.micronaut:micronaut-inject-groovy"
-    console "org.grails:grails-console"
+    console "org.apache.grails:grails-console"
+    developmentOnly "org.springframework.boot:spring-boot-devtools"
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
     implementation "org.springframework.boot:spring-boot-starter-logging"
     implementation "org.springframework.boot:spring-boot-starter-validation"
     implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.grails:grails-core"
-    implementation "org.springframework.boot:spring-boot-starter-actuator"
-    implementation "org.springframework.boot:spring-boot-starter-tomcat"
-    implementation "org.grails:grails-web-boot"
-    implementation "org.grails:grails-logging"
-    implementation "org.grails:grails-plugin-rest"
-    implementation "org.grails:grails-plugin-databinding"
-    implementation "org.grails:grails-plugin-i18n"
-    implementation "org.grails:grails-plugin-services"
-    implementation "org.grails:grails-plugin-url-mappings"
-    implementation "org.grails:grails-plugin-interceptors"
-    profile "org.grails.profiles:web-plugin"
-    runtimeOnly "com.bertramlabs.plugins:asset-pipeline-grails:3.3.4"
-    testImplementation "io.micronaut:micronaut-inject-groovy"
-    testImplementation "org.mockito:mockito-core"
-    testImplementation "org.grails:grails-web-testing-support"
+    implementation "org.springframework.boot:spring-boot-starter"
+    implementation "org.apache.grails:grails-core"
+    implementation 'org.apache.grails:grails-gsp'
+    implementation "com.fasterxml.jackson.core:jackson-databind"
+    profile "org.apache.grails.profiles:plugin"
+    runtimeOnly "org.fusesource.jansi:jansi"
+    testImplementation "org.spockframework:spock-core"
+    testImplementation "org.apache.groovy:groovy-json"
+    testImplementation "org.apache.grails:grails-testing-support-web"
+    testImplementation "net.bytebuddy:byte-buddy"
 }
 
-bootRun {
-    ignoreExitValue true
-    jvmArgs(
-            '-Dspring.output.ansi.enabled=always',
-            '-noverify',
-            '-XX:TieredStopAtLevel=1',
-            '-Xmx1024m')
-    sourceResources sourceSets.main
-    String springProfilesActive = 'spring.profiles.active'
-    systemProperty springProfilesActive, System.getProperty(springProfilesActive)
-}
+compileJava.options.release = 17
 
-tasks.withType(GroovyCompile) {
-    configure(groovyOptions) {
-        forkOptions.jvmArgs = ['-Xmx1024m']
-    }
-}
-
-tasks.withType(Test) {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
 
-// enable if you wish to package this plugin as a standalone application
-bootJar.enabled = false
-
-assets {
-    packagePlugin = true
+task sourceJar(type: Jar) {
+    from sourceSets.main.allSource
+    archiveClassifier = "sources"
 }
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        maven(MavenPublication) {
             from components.java
             artifactId project.name
             version project.version
             groupId project.group
+            artifact sourceJar
         }
     }
 }

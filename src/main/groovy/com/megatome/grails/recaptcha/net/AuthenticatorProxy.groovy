@@ -1,5 +1,7 @@
 package com.megatome.grails.recaptcha.net
 
+import groovy.transform.CompileStatic
+
 import static java.net.Authenticator.RequestorType.PROXY
 
 /**
@@ -32,21 +34,7 @@ class AuthenticatorProxy {
 
             if (username != null && password != null) {
                 // Build an authenticator
-                Authenticator.setDefault(new Authenticator() {
-                    @Override
-                    protected PasswordAuthentication getPasswordAuthentication() {
-                        def passwordAuth = null
-                        if (getRequestorType() == PROXY) {
-                            if (getRequestingHost().equalsIgnoreCase(server)) {
-                                if (port == getRequestingPort()) {
-                                    // Seems to be OK.
-                                    passwordAuth = new PasswordAuthentication(username, password.toCharArray())
-                                }
-                            }
-                        }
-                        passwordAuth
-                    }
-                })
+                Authenticator.setDefault(new DefaultAuthenticator(server, port, username, password))
             }
         }
     }
@@ -57,5 +45,34 @@ class AuthenticatorProxy {
 
     Proxy getProxy() {
         return proxy
+    }
+
+    @CompileStatic
+    static class DefaultAuthenticator extends Authenticator {
+        private final String server
+        private final int port
+        private final String username
+        private final String password
+
+        protected DefaultAuthenticator(String server, int port, String username, String password) {
+            this.server = server
+            this.port = port
+            this.username = username
+            this.password = password
+        }
+
+        @Override
+        protected PasswordAuthentication getPasswordAuthentication() {
+            def passwordAuth = null
+            if (getRequestorType() == PROXY) {
+                if (getRequestingHost().equalsIgnoreCase(server)) {
+                    if (port == getRequestingPort()) {
+                        // Seems to be OK.
+                        passwordAuth = new PasswordAuthentication(username, password.toCharArray())
+                    }
+                }
+            }
+            passwordAuth
+        }
     }
 }
