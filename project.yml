@@ -8,7 +8,7 @@ project:
   org: "Grails Plugins Collective"
 github:
   org: "gpc"
-  project: "grails-recaptcha-plugin"
+  project: "grails-recaptcha"
 license:
   name: "Apache-2.0"
 contributors:
