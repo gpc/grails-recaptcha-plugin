@@ -13,8 +13,8 @@ license:
   name: "Apache-2.0"
 contributors:
   iamthechad: "Chad Johnston"
-  bkoehm: "Brian Koehmstedt"
   sbglasius: "Søren Berg Glasius"
+  bkoehm: "Brian Koehmstedt"
   vishnu-aggarwal-ttn: "Vishnu Aggarwal"
 versions:
   current: "8.0.0"
