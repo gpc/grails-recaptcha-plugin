@@ -2,7 +2,9 @@
 project:
   name: "grails-recaptcha"
   title: "Grails ReCaptcha Plugin"
-  description: "Adds Google ReCaptcha support to Grails applications through a tag library for rendering the captcha widget and a service for verifying the user's response."
+  description: "Adds Google ReCaptcha support to Grails applications through a tag\
+    \ library for rendering the captcha widget and a service for verifying the user's\
+    \ response."
   org: "Grails Plugins Collective"
 github:
   org: "gpc"
@@ -14,7 +16,6 @@ contributors:
   bkoehm: "Brian Koehmstedt"
   sbglasius: "Søren Berg Glasius"
   vishnu-aggarwal-ttn: "Vishnu Aggarwal"
-  jameskleeh: "James Kleeh"
 versions:
   current: "8.0.0"
   previous:
