@@ -1,0 +1,14 @@
+[[releaseNotes]]
+== Release Notes
+
+* 8.0.0
+** Support for Grails 8, Spring Boot 4 and Java 21
+** Migrated to the `grails-plugin-template` build structure
+** Published as `io.github.gpc:grails-recaptcha`, replacing `org.grails.plugins:recaptcha`
+* 7.0.0 - Support for Grails 7
+* 5.0.0 - Support for Grails 5
+* 4.0.0 - Support for Grails 4
+* 3.2.0 - Configurable network timeouts for captcha verification
+* 3.1.0 - Support for Grails 3.2
+* 3.0.1 - Removed Mailhide support; `size` attribute supported in render parameters
+* 3.0.0 - Support for Grails 3

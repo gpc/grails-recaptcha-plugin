@@ -1,0 +1,83 @@
+[[tagLibrary]]
+=== Tag library
+
+All tags live in the `recaptcha` namespace.
+
+==== `<recaptcha:recaptcha>`
+
+Generates the HTML that displays the captcha. Supports the following attributes:
+
+[cols="1,3"]
+|===
+|Attribute |Description
+
+|`theme`
+|`dark` or `light`. Defaults to `light`.
+
+|`size`
+|`compact` or `normal`. Defaults to `normal`.
+
+|`lang`
+|Any of the https://developers.google.com/recaptcha/docs/language[supported ReCaptcha language codes].
+
+|`tabindex`
+|Optional tabindex of the widget.
+
+|`type`
+|`image` or `audio`, for when the checkbox is not sufficient. Defaults to `image`.
+
+|`successCallback`
+|Optional JavaScript function called when the user submits a successful response.
+
+|`expiredCallback`
+|Optional JavaScript function called when the successful response has expired.
+
+|`includeScript`
+|Set to `false` to leave out the `<script>` tag ReCaptcha requires, overriding the global
+configuration value. `<recaptcha:script>` is then also required.
+|===
+
+See the https://developers.google.com/recaptcha/docs/display#config[ReCaptcha client guide] for
+more details.
+
+==== `<recaptcha:script>`
+
+Renders the required `<script>` tag on its own. Combine it with `includeScript=false`, set either
+globally or on the tag, to place the script elsewhere in your markup. Supports the `lang`
+attribute.
+
+WARNING: This tag does not work in the `<head>` section of the page.
+
+==== `<recaptcha:recaptchaExplicit>`
+
+Generates the HTML for explicit display and rendering of the captcha. Supports the following
+attributes:
+
+[cols="1,3"]
+|===
+|Attribute |Description
+
+|`lang`
+|Any of the https://developers.google.com/recaptcha/docs/language[supported ReCaptcha language codes].
+
+|`loadCallback`
+|The JavaScript function called once all dependencies have loaded. This function is normally
+responsible for rendering the captcha. Required.
+|===
+
+For more about explicit mode, see
+https://developers.google.com/recaptcha/docs/display#explicit_render[the ReCaptcha documentation].
+
+==== `<recaptcha:renderParameters>`
+
+Generates the JSON-like string used as the argument to `grecaptcha.render()`. Supports `theme`,
+`size`, `tabindex`, `type`, `successCallback` and `expiredCallback`, with the same meanings as on
+`<recaptcha:recaptcha>`.
+
+==== `<recaptcha:ifEnabled>` / `<recaptcha:ifDisabled>`
+
+Render their body when the captcha is, respectively, enabled or disabled in the configuration.
+
+==== `<recaptcha:ifFailed>`
+
+Renders its body when the previous verification failed. Useful for showing your own error message.

@@ -1,0 +1,123 @@
+[[examples]]
+=== Examples
+
+A runnable example application lives under
+https://github.com/gpc/grails-recaptcha-plugin/tree/main/examples/app1[`examples/app1`] in the
+plugin's repository. The snippets below are taken from it.
+
+==== Automatic rendering
+
+The most common scenario. In your GSP:
+
+[source,html]
+----
+<recaptcha:ifEnabled>
+    <recaptcha:recaptcha theme="dark"/>
+</recaptcha:ifEnabled>
+----
+
+Leaving out `theme` defaults the captcha to the `light` theme.
+
+==== Explicit rendering
+
+[source,html]
+----
+<script type="text/javascript">
+    var onloadCallback = function () {
+        grecaptcha.render('html_element', <recaptcha:renderParameters theme="dark" type="audio" tabindex="2"/>);
+    };
+</script>
+<g:form action="myAction" method="post">
+    <recaptcha:ifEnabled>
+        <recaptcha:recaptchaExplicit loadCallback="onloadCallback"/>
+        <div id="html_element"></div>
+    </recaptcha:ifEnabled>
+    <g:submitButton name="submit"/>
+</g:form>
+----
+
+For more about explicit mode, see
+https://developers.google.com/recaptcha/docs/display#explicit_render[the ReCaptcha documentation].
+
+==== Separate script tag
+
+Set `includeScript` to `false`, either on the tag as below or globally in the configuration:
+
+[source,html]
+----
+<body>
+    <g:form action="validateNormal" method="post">
+        <recaptcha:ifEnabled>
+            <recaptcha:recaptcha includeScript="false"/>
+        </recaptcha:ifEnabled>
+        <g:submitButton name="submit"/>
+    </g:form>
+    <recaptcha:script/>
+</body>
+----
+
+The `<script src="https://www.google.com/recaptcha/api.js?" async defer></script>` tag is then
+emitted at the bottom of the document instead of immediately before the `<div>` holding the
+captcha.
+
+==== Customizing the language
+
+Set `lang` on `<recaptcha:recaptcha>`, `<recaptcha:recaptchaExplicit>` or `<recaptcha:script>`. See
+https://developers.google.com/recaptcha/docs/language[ReCaptcha language codes] for the available
+values.
+
+==== Verifying user input
+
+An abbreviated controller that verifies the captcha when a new user is saved:
+
+[source,groovy]
+----
+import com.megatome.grails.RecaptchaService
+
+class UserController {
+
+    RecaptchaService recaptchaService
+
+    def save() {
+        def user = new User(params)
+        // ...other validation...
+        def recaptchaOK = recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)
+        if (!user.hasErrors() && recaptchaOK && user.save()) {
+            recaptchaService.cleanUp(session)
+            // ...other account creation activities...
+            render(view: 'showConfirmation', model: [user: user])
+        } else {
+            render(view: 'create', model: [user: user])
+        }
+    }
+}
+----
+
+==== Testing
+
+Google publishes https://developers.google.com/recaptcha/docs/faq[test keys] that render a captcha
+which always validates. Configuring them in your test environment lets integration tests exercise
+the plugin without a real ReCaptcha account:
+
+[source,yaml]
+----
+environments:
+    test:
+        recaptcha:
+            publicKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI'
+            privateKey: '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe'
+----
+
+To assert on the rendered markup without any network access at all, call the service directly:
+
+[source,groovy]
+----
+def html = recaptchaService.createCaptcha(theme: 'dark')
+
+expect:
+html.contains('class="g-recaptcha"')
+html.contains('data-theme="dark"')
+----
+
+Alternatively, disable the captcha entirely in the test environment — `verifyAnswer` then returns
+`true` without contacting Google.

@@ -1,0 +1,98 @@
+[[configuration]]
+=== Configuration
+
+The plugin reads its configuration from the `recaptcha` block of your application's
+`application.yml`. The values match those used by the ReCaptcha service:
+
+[source,yaml]
+----
+recaptcha:
+    publicKey: "your site key"
+    privateKey: "your secret key"
+    includeScript: true
+    includeNoScript: true
+----
+
+`publicKey` and `privateKey` are required — the plugin throws an `IllegalArgumentException` when
+either is missing or empty.
+
+`includeScript` controls whether the `<script>` tag ReCaptcha needs is emitted together with the
+widget; see <<tagLibrary,the tag library reference>> for overriding it per tag. `includeNoScript`
+controls whether the `<noscript>` fallback markup is emitted.
+
+==== Per-environment configuration
+
+Any of the settings can be given per environment. Disabling the captcha during development is the
+most common case:
+
+[source,yaml]
+----
+environments:
+    development:
+        recaptcha:
+            enabled: false
+    production:
+        recaptcha:
+            enabled: true
+----
+
+When `enabled` is `false` the tag library renders nothing and `verifyAnswer` returns `true`
+without contacting Google, so no controller changes are needed to turn the captcha off.
+
+==== Proxy server configuration
+
+If your server reaches the ReCaptcha service through a proxy, configure it under `recaptcha.proxy`:
+
+[source,yaml]
+----
+recaptcha:
+    proxy:
+        server: ""    # IP or hostname of the proxy server
+        port: ""      # Proxy server port, defaults to 80
+        username: ""  # Optional, only if the proxy requires authentication
+        password: ""  # Optional, only if the proxy requires authentication
+----
+
+Only `server` is required. `port` defaults to `80`, and `username` and `password` are needed only
+for an authenticating proxy.
+
+==== Timeout configuration
+
+If verification requests to Google are slow, the network timeouts can be changed independently of
+each other:
+
+[source,yaml]
+----
+recaptcha:
+    timeoutConfig:
+        connectTimeout: 10000  # Timeout for establishing the connection, in ms. Defaults to 10000
+        readTimeout: 1000      # Timeout for waiting on the response, in ms. Defaults to 1000
+----
+
+==== Externalized configuration
+
+See the Grails documentation for using externalized configuration files. As an alternative to
+`application.yml`, the plugin falls back to a `RecaptchaConfig` Groovy script on the classpath:
+
+[source,groovy]
+----
+recaptcha {
+    publicKey = ""
+    privateKey = ""
+    includeNoScript = true
+    includeScript = true
+}
+
+environments {
+    development {
+        recaptcha {
+            enabled = false
+        }
+    }
+    production {
+        recaptcha {
+            enabled = true
+        }
+    }
+}
+----

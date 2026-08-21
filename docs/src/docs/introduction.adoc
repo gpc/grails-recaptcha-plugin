@@ -1,0 +1,22 @@
+[[introduction]]
+== Introduction
+
+The Grails ReCaptcha plugin adds https://www.google.com/recaptcha[Google ReCaptcha] support to
+Grails applications, protecting forms from spam and abuse while letting real people through with
+ease.
+
+The plugin provides two things:
+
+* a tag library, under the `recaptcha` namespace, that renders the captcha widget and the script
+  tags it needs, and
+* a service, `RecaptchaService`, that verifies the answer the user submitted against the ReCaptcha
+  service.
+
+To use the plugin you need a ReCaptcha account, available from
+https://www.google.com/recaptcha[google.com/recaptcha].
+
+include::introduction/license.adoc[]
+
+include::introduction/acknowledgements.adoc[]
+
+include::introduction/sourceCode.adoc[]

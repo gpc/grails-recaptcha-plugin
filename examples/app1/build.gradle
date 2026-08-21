@@ -1,0 +1,49 @@
+plugins {
+    id 'config.example-app'
+}
+
+version = projectVersion
+group = 'app1'
+
+dependencies {
+    // Grails 8's grails-web Gradle plugin adds the Grails BOM to every declarable
+    // configuration, including Gradle's own jacocoAgent/jacocoAnt. That makes them
+    // non-empty, so the JaCoCo plugin's defaultDependencies never contribute the
+    // agent and integrationTest fails with "jacocoAgent ... contains no files".
+    // Declaring them explicitly restores it. The plugin project is unaffected --
+    // grails-plugin does not add the BOM to those configurations.
+    jacocoAgent "org.jacoco:org.jacoco.agent:$jacocoVersion"
+    jacocoAnt "org.jacoco:org.jacoco.ant:$jacocoVersion"
+
+    profile 'org.apache.grails.profiles:web'
+    console 'org.apache.grails:grails-console'
+
+    implementation project(':grails-recaptcha')
+
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    implementation 'org.springframework.boot:spring-boot-starter-logging'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-autoconfigure'
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    implementation 'org.apache.grails:grails-core'
+    implementation 'org.apache.grails:grails-web-boot'
+    implementation 'org.apache.grails:grails-logging'
+    implementation 'org.apache.grails:grails-databinding'
+    implementation 'org.apache.grails:grails-services'
+    implementation 'org.apache.grails:grails-url-mappings'
+    implementation 'org.apache.grails:grails-interceptors'
+    implementation 'org.apache.grails:grails-layout'
+    implementation 'org.apache.grails:grails-gsp'
+
+    runtimeOnly 'cloud.wondrify:asset-pipeline-grails'
+
+    testAndDevelopmentOnly 'org.webjars.npm:bootstrap'
+    testAndDevelopmentOnly 'org.webjars.npm:bootstrap-icons'
+    testAndDevelopmentOnly 'org.webjars.npm:jquery'
+
+    testImplementation 'org.apache.grails:grails-testing-support-web'
+    testImplementation 'org.spockframework:spock-core'
+}
