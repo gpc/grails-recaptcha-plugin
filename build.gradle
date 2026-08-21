@@ -1,66 +1,7 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url "https://repo.grails.org/grails/restricted" }
-    }
-    dependencies {
-        classpath platform("org.apache.grails:grails-bom:$grailsVersion")
-        classpath "org.apache.grails:grails-gradle-plugins"
-    }
+plugins {
+    id 'idea'
+    id 'config.docs'
+    id 'config.publish-root'
 }
 
-version "7.0.0-SNAPSHOT"
-group "org.grails.plugins"
-
-apply plugin: "eclipse"
-apply plugin: "idea"
-apply plugin: "org.apache.grails.gradle.grails-plugin"
-apply plugin: "maven-publish"
-apply plugin: "org.apache.grails.gradle.grails-gsp"
-
-repositories {
-    mavenCentral()
-    maven { url "https://repo.grails.org/grails/restricted" }
-}
-
-dependencies {
-    console "org.apache.grails:grails-console"
-    developmentOnly "org.springframework.boot:spring-boot-devtools"
-    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
-    implementation "org.springframework.boot:spring-boot-starter-logging"
-    implementation "org.springframework.boot:spring-boot-starter-validation"
-    implementation "org.springframework.boot:spring-boot-autoconfigure"
-    implementation "org.springframework.boot:spring-boot-starter"
-    implementation "org.apache.grails:grails-core"
-    implementation 'org.apache.grails:grails-gsp'
-    implementation "com.fasterxml.jackson.core:jackson-databind"
-    profile "org.apache.grails.profiles:plugin"
-    runtimeOnly "org.fusesource.jansi:jansi"
-    testImplementation "org.spockframework:spock-core"
-    testImplementation "org.apache.groovy:groovy-json"
-    testImplementation "org.apache.grails:grails-testing-support-web"
-    testImplementation "net.bytebuddy:byte-buddy"
-}
-
-compileJava.options.release = 17
-
-tasks.withType(Test).configureEach {
-    useJUnitPlatform()
-}
-
-task sourceJar(type: Jar) {
-    from sourceSets.main.allSource
-    archiveClassifier = "sources"
-}
-
-publishing {
-    publications {
-        maven(MavenPublication) {
-            from components.java
-            artifactId project.name
-            version project.version
-            groupId project.group
-            artifact sourceJar
-        }
-    }
-}
+// Intentionally left blank - use composition instead

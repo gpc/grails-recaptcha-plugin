@@ -1,0 +1,16 @@
+[[verification]]
+=== Verifying the answer
+
+Inject `RecaptchaService` into your controller and call `verifyAnswer`:
+
+[source,groovy]
+----
+recaptchaService.verifyAnswer(session, request.getRemoteAddr(), params)
+----
+
+It returns `true` or `false`. It also returns `true` when the plugin is disabled in the
+configuration, which means you do not have to change your controller to turn the captcha off.
+
+After a successful verification, call `cleanUp(session)` to release the resources the plugin
+associated with the session. This is not strictly required, but skipping it leaves the ReCaptcha
+state in memory until the session expires.

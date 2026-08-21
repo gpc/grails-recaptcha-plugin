@@ -1,0 +1,22 @@
+[[installation]]
+=== Installation
+
+Add the plugin to the `dependencies` block of your `build.gradle`:
+
+[source,groovy,subs="attributes+"]
+----
+dependencies {
+    implementation 'io.github.gpc:grails-recaptcha:{version}'
+}
+----
+
+*Requirements:*
+
+* Grails 8.0.0 or higher
+* Java 21 or higher
+
+==== Previous versions
+
+`io.github.gpc:grails-recaptcha` is a new artifact. Earlier releases were published as
+`org.grails.plugins:recaptcha` through the Grails plugin repository rather than Maven Central: use
+version `7.0.0` for Grails 7, `5.0.0` for Grails 5, `4.0.0` for Grails 4, and `3.2.0` for Grails 3.

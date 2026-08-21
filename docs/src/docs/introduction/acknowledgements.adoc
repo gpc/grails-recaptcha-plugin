@@ -1,0 +1,13 @@
+[[acknowledgements]]
+=== Acknowledgments
+
+The plugin was originally written by Chad Johnston at Megatome Technologies, and builds on the
+ideas of `recaptcha4j`.
+
+Following are the plugin contributors:
+
+* https://github.com/iamthechad[Chad Johnston]
+* https://github.com/bkoehm[Brian Koehmstedt]
+* https://github.com/sbglasius[Søren Berg Glasius]
+* https://github.com/vishnu-aggarwal-ttn[Vishnu Aggarwal]
+* https://github.com/jameskleeh[James Kleeh]
