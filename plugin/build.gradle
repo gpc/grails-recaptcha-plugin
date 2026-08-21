@@ -18,6 +18,13 @@ dependencies {
     compileOnly platform("org.apache.grails:grails-bom:$grailsVersion")
     compileOnly 'org.apache.grails:grails-dependencies-starter-web'
 
+    // Spring Boot 4 split RestTemplateBuilder out of the autoconfigure module into
+    // spring-boot-restclient, which grails-dependencies-starter-web does not bring in.
+    // Post needs it at runtime, so it travels with the plugin rather than being
+    // assumed present in the consuming application.
+    implementation platform("org.apache.grails:grails-bom:$grailsVersion")
+    implementation 'org.springframework.boot:spring-boot-restclient'
+
     testImplementation platform("org.apache.grails:grails-bom:$grailsVersion")
     testImplementation 'org.apache.grails:grails-dependencies-starter-web'
     testImplementation 'org.apache.grails:grails-dependencies-test'

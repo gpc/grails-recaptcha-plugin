@@ -6,8 +6,8 @@ The **Grails ReCaptcha Plugin** adds [Google ReCaptcha](https://www.google.com/r
 Grails applications: a tag library that renders the captcha widget, and a service that verifies the
 answer the user submitted.
 
-- **Language:** Groovy 4.0.30 on Java 17
-- **Framework:** Grails 7.x
+- **Language:** Groovy 5.0.8 on Java 21
+- **Framework:** Grails 8.x
 - **Build System:** Gradle 8.14.4 (with wrapper)
 - **Artifact:** `io.github.gpc:grails-recaptcha`
 - **Current Version:** 8.0.0-SNAPSHOT
@@ -17,6 +17,10 @@ This repository is built on
 [grails-plugin-template](https://github.com/grails-plugins/grails-plugin-template). Files under
 `build-logic/`, `gradle/`, `.github/` and `.agents/` are synced from the template — do not edit them
 here; change them upstream. Plugin-specific guidance belongs in this file.
+
+The template itself targets Grails 7 on Java 17, while this branch targets Grails 8 on
+Java 21. `.sdkmanrc` is therefore pinned against the sync with a `.sdkmanrc.lock` file --
+do not remove it, or a sync PR will drop the build back to Java 17.
 
 ## Skill Files (Best Practices)
 
@@ -46,6 +50,8 @@ Detailed best practices are documented as skills in `.agents/skills/` (`.claude`
    `provider {}`).
 6. **Never contact Google from a test.** Unit tests stub `Post`; integration tests assert on rendered markup only.
    Google's public test keys are configured in the example app so nothing needs a real ReCaptcha account.
+7. **`Post.getResponse()` swallows every exception** and returns `null`. Any change to its Spring HTTP calls must be
+   covered by a test that asserts a successful response, or a broken API will look like a failed verification.
 
 ## Repository Structure
 
@@ -100,9 +106,9 @@ grails-recaptcha-plugin/
 
 Use SDKMAN to install the correct tool versions (see `.sdkmanrc`):
 
-- Java: `17.0.18-librca`
+- Java: `21.0.11-librca`
 - Gradle: `8.14.4`
-- Groovy: `4.0.30`
+- Groovy: `5.0.8`
 
 Run `sdk env install` to set up the environment.
 

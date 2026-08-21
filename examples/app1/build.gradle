@@ -6,6 +6,15 @@ version = projectVersion
 group = 'app1'
 
 dependencies {
+    // Grails 8's grails-web Gradle plugin adds the Grails BOM to every declarable
+    // configuration, including Gradle's own jacocoAgent/jacocoAnt. That makes them
+    // non-empty, so the JaCoCo plugin's defaultDependencies never contribute the
+    // agent and integrationTest fails with "jacocoAgent ... contains no files".
+    // Declaring them explicitly restores it. The plugin project is unaffected --
+    // grails-plugin does not add the BOM to those configurations.
+    jacocoAgent "org.jacoco:org.jacoco.agent:$jacocoVersion"
+    jacocoAnt "org.jacoco:org.jacoco.ant:$jacocoVersion"
+
     profile 'org.apache.grails.profiles:web'
     console 'org.apache.grails:grails-console'
 
@@ -29,7 +38,6 @@ dependencies {
     implementation 'org.apache.grails:grails-layout'
     implementation 'org.apache.grails:grails-gsp'
 
-    runtimeOnly 'org.fusesource.jansi:jansi'
     runtimeOnly 'cloud.wondrify:asset-pipeline-grails'
 
     testAndDevelopmentOnly 'org.webjars.npm:bootstrap'

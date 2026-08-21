@@ -1,7 +1,7 @@
 package com.megatome.grails.recaptcha.net
 
 import org.apache.commons.logging.LogFactory
-import org.springframework.boot.web.client.RestTemplateBuilder
+import org.springframework.boot.restclient.RestTemplateBuilder
 import org.springframework.http.client.ClientHttpRequestFactory
 import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.web.client.RestTemplate
@@ -57,7 +57,7 @@ class Post {
 
     def getResponse() {
         try {
-            def uriBuilder = UriComponentsBuilder.fromHttpUrl(url)
+            def uriBuilder = UriComponentsBuilder.fromUriString(url)
             queryParams.params.each { name, value ->
                 uriBuilder.queryParam(name as String, value)
             }
