@@ -17,8 +17,9 @@ contributors:
   bkoehm: "Brian Koehmstedt"
   vishnu-aggarwal-ttn: "Vishnu Aggarwal"
 versions:
-  current: "8.0.0-RC1"
+  current: "8.0.0"
   previous:
+  - "8.0.0"
   - "8.0.0-RC1"
   ignore:
   - "8.0.x"
